@@ -18,8 +18,6 @@ export interface ISignup {
 	email: string;
 	password: string;
 	description: string;
-	following: Schema.Types.ObjectId[];
-	followers: Schema.Types.ObjectId[];
 }
 
 export type SignupData = {

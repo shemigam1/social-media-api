@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express';
 import authRouter from './auth';
+import postRouter from './post';
 import { ResultFunction } from '../helpers/utils';
 import { ReturnStatus } from '../types/generic';
 import authMiddleWare from '../middlewares/authMiddleware';
@@ -8,6 +9,7 @@ const apiRouter = Router();
 
 // define your routes
 apiRouter.use('/auth', authRouter);
+apiRouter.use('/post', postRouter)
 
 apiRouter.use('/hello', authMiddleWare, (req: Request, res: Response) => {
 	const data = ResultFunction(
