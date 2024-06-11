@@ -4,7 +4,7 @@ import { comparePassword, hashPassword } from "../helpers/hash";
 
 const UserSchema: Schema = new Schema<ISignup>({
     name: { type: String, required: true, unique: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     description: { type: String, required: false },
 })

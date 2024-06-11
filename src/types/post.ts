@@ -2,6 +2,7 @@ import { Schema } from "mongoose";
 
 export interface IPost {
     userId: Schema.Types.ObjectId;
+    // postId: Schema.Types.ObjectId | string;
     title: string;
     description: string;
     likeCount: number;
@@ -9,6 +10,7 @@ export interface IPost {
 
 export type PostData = {
     userId: Schema.Types.ObjectId;
+    // postId: Schema.Types.ObjectId | string;
     title: string;
     description: string;
 };

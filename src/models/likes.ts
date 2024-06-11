@@ -3,8 +3,8 @@ import mongoose, { Schema, Types } from "mongoose";
 import { ILike } from "../types/post";
 
 const LikeSchema: Schema = new Schema<ILike>({
-    userId: { type: Schema.Types.ObjectId, required: true, ref: 'User', unique: true },
-    postId: { type: Schema.Types.ObjectId, required: true, ref: 'Post', unique: true },
+    userId: { type: String, required: true, unique: true },
+    postId: { type: String, required: true, unique: true },
 
 })
 
