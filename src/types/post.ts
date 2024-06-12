@@ -1,19 +1,35 @@
 import { Schema } from "mongoose";
 
 export interface IPost {
-    userId: Schema.Types.ObjectId;
+    userId: Schema.Types.ObjectId | string;
     // postId: Schema.Types.ObjectId | string;
     title: string;
     description: string;
     likeCount: number;
+    deleted: boolean;
 }
 
 export type PostData = {
-    userId: Schema.Types.ObjectId;
+    userId: Schema.Types.ObjectId | string;
     // postId: Schema.Types.ObjectId | string;
     title: string;
     description: string;
 };
+
+export type UpdatePost = {
+    userId: Schema.Types.ObjectId | string;
+    data: {
+        title: string;
+        description: string
+    }
+}
+
+export type DeletePost = {
+    userId: Schema.Types.ObjectId | string;
+    data: {
+        deleted: boolean
+    }
+}
 
 export interface IComment {
     userId: Schema.Types.ObjectId;

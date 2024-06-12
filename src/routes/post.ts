@@ -2,12 +2,14 @@ import { Request, Response, Router } from "express";
 import { ResultFunction } from '../helpers/utils';
 import { ReturnStatus } from '../types/generic';
 import authMiddleWare from '../middlewares/authMiddleware';
-import { createPostController, getAllPostsByOneUserController, getOnePostByOneUserController } from "../controllers/post";
+import { createPostController, deletePostController, getAllPostsByOneUserController, getOnePostByOneUserController, updatePostController } from "../controllers/post";
 
 const postRouter = Router()
 
-postRouter.use('/createpost', authMiddleWare, createPostController)
-postRouter.use('/getposts/:userId', authMiddleWare, getAllPostsByOneUserController)
-postRouter.use('/getpost/:userId', authMiddleWare, getOnePostByOneUserController)
+postRouter.post('/createpost', authMiddleWare, createPostController)
+postRouter.get('/getposts/:userId', authMiddleWare, getAllPostsByOneUserController)
+postRouter.get('/getpost/:postId', authMiddleWare, getOnePostByOneUserController)
+postRouter.put('/updatepost/:postId', authMiddleWare, updatePostController)
+postRouter.put('/deletepost/:postId', authMiddleWare, deletePostController)
 
 export default postRouter

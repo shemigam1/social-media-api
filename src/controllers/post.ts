@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { IPost, PostData } from '../types/post';
+import { DeletePost, IPost, PostData, UpdatePost } from '../types/post';
 import { postFactory } from '../services/factories';
 
 
@@ -21,7 +21,8 @@ export const createPostController = async (
         // postId: "",
         title: req.body.title,
         description: req.body.description,
-        likeCount: req.body.likes,
+        likeCount: 0,
+        deleted: false
         // createdAt: Date.now()
     };
     const response = await postFactory().createPost(input);
@@ -35,7 +36,7 @@ export const getAllPostsByOneUserController = async (
     next: NextFunction
 ) => {
     const input: PostData = {
-        userId: req.body.userId,
+        userId: req.params.userId,
         // postId: "",
         title: "",
         description: ""
@@ -50,7 +51,8 @@ export const getOnePostByOneUserController = async (
     next: NextFunction
 ) => {
     const input: PostData = {
-        userId: req.body.userId,
+        // userid is placeholder for postid
+        userId: req.params.postId,
         // postId: req.params.id,
         title: "",
         description: ""
@@ -60,4 +62,38 @@ export const getOnePostByOneUserController = async (
 };
 // get random posts from random users (feed)
 // update post
+export const updatePostController = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const input: UpdatePost = {
+        // userid is placeholder for postid
+        userId: req.params.postId,
+        // postId: req.params.id,
+        data: {
+            title: req.body.title,
+            description: req.body.description
+        }
+    };
+    const response = await postFactory().updatePost(input);
+    return res.status(response.code).json(response);
+};
+
+export const deletePostController = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const input: DeletePost = {
+        // userid is placeholder for postid
+        userId: req.params.postId,
+        // postId: req.params.id,
+        data: {
+            deleted: true
+        }
+    };
+    const response = await postFactory().deletePost(input);
+    return res.status(response.code).json(response);
+};
 // delete post
