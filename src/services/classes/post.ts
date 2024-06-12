@@ -58,6 +58,7 @@ class PostClass {
             const { userId } = input
             try {
                 const posts = await Post.find({ userId: userId })
+                posts.filter((post) => post.deleted === false)
                 console.log(posts);
 
                 return ResultFunction(
@@ -95,6 +96,15 @@ class PostClass {
             try {
                 // userid in this case is actually the postid
                 const post = await Post.findById(userId)
+                if (post?.deleted === true) {
+                    return ResultFunction(
+                        false,
+                        'post has been deleted',
+                        422,
+                        ReturnStatus.BAD_REQUEST,
+                        null
+                    )
+                }
                 console.log(post);
 
                 return ResultFunction(
