@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { DeletePost, IPost, PostData, UpdatePost } from '../types/post';
+import { DeletePost, ILike, IPost, LikeData, PostData, UpdatePost } from '../types/post';
 import { postFactory } from '../services/factories';
 
 
@@ -69,9 +69,10 @@ export const updatePostController = async (
 ) => {
     const input: UpdatePost = {
         // userid is placeholder for postid
-        userId: req.params.postId,
+        postId: req.params.postId,
         // postId: req.params.id,
         data: {
+            userId: req.body.userId,
             title: req.body.title,
             description: req.body.description
         }
@@ -80,6 +81,7 @@ export const updatePostController = async (
     return res.status(response.code).json(response);
 };
 
+// delete post
 export const deletePostController = async (
     req: Request,
     res: Response,
@@ -96,4 +98,18 @@ export const deletePostController = async (
     const response = await postFactory().deletePost(input);
     return res.status(response.code).json(response);
 };
-// delete post
+
+// like post
+export const likePostController = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const input: ILike = {
+        userId: req.body.userId,
+        postId: req.params.postId,
+
+    };
+    const response = await postFactory().likePost(input);
+    return res.status(response.code).json(response);
+};

@@ -7,6 +7,7 @@ const UserSchema: Schema = new Schema<ISignup>({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     description: { type: String, required: false },
+    followerCount: { type: Number, required: false, default: 0 }
 })
 
 UserSchema.pre('save', async function (next) {

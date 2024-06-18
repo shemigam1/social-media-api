@@ -1,9 +1,10 @@
-import { DeletePost, PostData, UpdatePost } from "../../types/post";
+import { DeletePost, ILike, LikeData, PostData, UpdatePost } from "../../types/post";
 import Post from "../../models/post";
 import { ResultFunction } from "../../helpers/utils";
 import { ReturnStatus } from "../../types/generic";
 import { log } from "winston";
 import { Schema } from "mongoose";
+import Like from "../../models/likes";
 
 class PostClass {
 
@@ -138,11 +139,11 @@ class PostClass {
 
     public async updatePost(input: UpdatePost) {
         try {
-            const { userId, data } = input
+            const { postId, data } = input
             // userid is placeholder for postid
 
             try {
-                const existingPost = Post.findById({ userId })
+                const existingPost = await Post.findById(postId)
 
                 if (!existingPost) {
                     return ResultFunction(
@@ -153,7 +154,31 @@ class PostClass {
                         null
                     )
                 }
+
+                if (existingPost.userId.toString() === data.userId) {
+                    const { userId, ...other } = data
+                    const updatedPost = await Post.findByIdAndUpdate(postId, other, { new: true })
+                    //const updatedPost = await Post.findByIdAndUpdate(postId, other)
+
+                    return ResultFunction(
+                        true,
+                        'post updated successful',
+                        200,
+                        ReturnStatus.OK,
+                        updatedPost
+                    )
+                } else {
+                    return ResultFunction(
+                        false,
+                        'Unauthorized to update post',
+                        400,
+                        ReturnStatus.UNAUTHORIZED,
+                        null
+                    )
+                }
             } catch (error) {
+                console.log(error);
+
                 return ResultFunction(
                     false,
                     'something went wrong',
@@ -163,17 +188,11 @@ class PostClass {
                 );
             }
 
-            const updatedPost = await Post.findByIdAndUpdate(userId, data)
+            // if (existingPost.userId === userId) { }
 
-            return ResultFunction(
-                true,
-                'post updated successful',
-                200,
-                ReturnStatus.OK,
-                updatedPost
-            )
+
         } catch (error) {
-            console.log(error);
+            console.log(error, 'this is the error');
 
             return ResultFunction(
                 false,
@@ -192,7 +211,7 @@ class PostClass {
             console.log(data);
 
             try {
-                const existingPost = Post.findById({ userId })
+                const existingPost = Post.findById(userId)
 
                 if (!existingPost) {
                     return ResultFunction(
@@ -224,6 +243,78 @@ class PostClass {
             )
         } catch (error) {
             console.log(error);
+
+            return ResultFunction(
+                false,
+                'something went wrong',
+                422,
+                ReturnStatus.NOT_OK,
+                null
+            );
+        }
+    }
+
+    public async likePost(input: ILike) {
+        let likeCount
+        try {
+            const { userId, postId } = input
+
+            try {
+                const existingPost = await Post.findById(postId)
+
+                // console.log(input);
+
+
+                if (!existingPost) {
+                    return ResultFunction(
+                        false,
+                        'post doesnt exist',
+                        404,
+                        ReturnStatus.BAD_REQUEST,
+                        null
+                    )
+                }
+
+                const existingLike = await Like.findOne({ userId, postId })
+
+                if (existingLike) {
+                    return ResultFunction(
+                        false,
+                        'post liked by user already',
+                        422,
+                        ReturnStatus.BAD_REQUEST,
+                        null
+                    )
+                }
+
+                const like = await Like.create(input)
+
+                const likes = (await Like.find({ postId }))
+                likeCount = likes.length
+                // console.log(likeCount);
+                // console.log(likes);
+                // console.log(likeCount);
+
+                const likeCountUpdate = await Post.findByIdAndUpdate(postId, { likeCount }, { new: true })
+
+                return ResultFunction(
+                    true,
+                    'post liked',
+                    200,
+                    ReturnStatus.OK,
+                    likeCountUpdate
+                )
+            } catch (error) {
+                return ResultFunction(
+                    false,
+                    'something went wrong',
+                    422,
+                    ReturnStatus.NOT_OK,
+                    null
+                );
+            }
+
+        } catch (error) {
 
             return ResultFunction(
                 false,

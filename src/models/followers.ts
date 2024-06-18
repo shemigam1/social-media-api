@@ -8,5 +8,5 @@ const FollowerSchema: Schema = new Schema<IFollower>({
 
 })
 
-const Follower = mongoose.model<IFollower>('Follow', FollowerSchema)
+const Follower = mongoose.model<IFollower>('Follower', FollowerSchema)
 export default Follower

@@ -18,6 +18,7 @@ export interface ISignup {
 	email: string;
 	password: string;
 	description: string;
+	followerCount: number
 }
 
 export type SignupData = {

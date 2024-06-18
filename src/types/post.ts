@@ -17,12 +17,18 @@ export type PostData = {
 };
 
 export type UpdatePost = {
-    userId: Schema.Types.ObjectId | string;
+    postId: Schema.Types.ObjectId | string;
     data: {
+        userId: Schema.Types.ObjectId | string;
         title: string;
         description: string
     }
 }
+
+// export interface IUpdatePost {
+//     title: string;
+//     description: string
+// }
 
 export type DeletePost = {
     userId: Schema.Types.ObjectId | string;
@@ -43,11 +49,16 @@ export type CommentData = {
 }
 
 export interface IFollower {
-    userId: Schema.Types.ObjectId;
-    followingId: Schema.Types.ObjectId;
+    userId: Schema.Types.ObjectId | string;
+    followingId: Schema.Types.ObjectId | string;
 }
 
 export interface ILike {
-    userId: Schema.Types.ObjectId;
-    postId: Schema.Types.ObjectId;
+    userId: Schema.Types.ObjectId | string;
+    postId: Schema.Types.ObjectId | string;
+}
+
+export type LikeData = {
+    userId: Schema.Types.ObjectId | string;
+    postId: Schema.Types.ObjectId | string
 }
