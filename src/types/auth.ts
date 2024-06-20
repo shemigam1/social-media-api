@@ -19,6 +19,7 @@ export interface ISignup {
 	password: string;
 	description: string;
 	followerCount: number
+	followingCount: number
 }
 
 export type SignupData = {

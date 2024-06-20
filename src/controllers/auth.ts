@@ -12,7 +12,8 @@ export const signupController = async (
 		email: req.body.email,
 		password: req.body.password,
 		description: req.body.description,
-		followerCount: 0
+		followerCount: 0,
+		followingCount: 0
 	};
 	const response = await authFactory().signup(input);
 	return res.status(response.code).json(response);

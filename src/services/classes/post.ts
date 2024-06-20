@@ -1,12 +1,41 @@
-import { DeletePost, ILike, LikeData, PostData, UpdatePost } from "../../types/post";
+import { CommentData, DeletePost, GetComments, IComment, ILike, LikeData, PostData, UpdatePost } from "../../types/post";
 import Post from "../../models/post";
 import { ResultFunction } from "../../helpers/utils";
 import { ReturnStatus } from "../../types/generic";
 import { log } from "winston";
 import { Schema } from "mongoose";
 import Like from "../../models/likes";
+import Comment from "../../models/comment";
 
 class PostClass {
+
+    public async feed() {
+        try {
+            const posts = await Post.aggregate([
+                { $match: { deleted: false } },
+                { $sample: { size: 2 } } // return a random selection of 10 posts
+            ]);
+
+            // console.log(posts);
+
+            return ResultFunction(
+                true,
+                'post returned successful',
+                200,
+                ReturnStatus.OK,
+                posts
+            );
+
+        } catch (error) {
+            return ResultFunction(
+                false,
+                'couldnt get posts',
+                422,
+                ReturnStatus.NOT_OK,
+                null
+            );
+        }
+    }
 
     public async createPost(input: PostData) {
         try {
@@ -232,7 +261,7 @@ class PostClass {
                 );
             }
 
-            const deletedPost = await Post.findByIdAndUpdate(userId, data)
+            const deletedPost = await Post.findByIdAndUpdate(userId, data, { new: true })
 
             return ResultFunction(
                 true,
@@ -303,6 +332,111 @@ class PostClass {
                     200,
                     ReturnStatus.OK,
                     likeCountUpdate
+                )
+            } catch (error) {
+                return ResultFunction(
+                    false,
+                    'something went wrong',
+                    422,
+                    ReturnStatus.NOT_OK,
+                    null
+                );
+            }
+
+        } catch (error) {
+
+            return ResultFunction(
+                false,
+                'something went wrong',
+                422,
+                ReturnStatus.NOT_OK,
+                null
+            );
+        }
+    }
+
+    public async commentPost(input: CommentData) {
+        // let likeCount
+        try {
+            const { userId, postId, comment } = input
+
+            try {
+                const existingPost = await Post.findById(postId)
+
+                // console.log(input);
+
+
+                if (!existingPost) {
+                    return ResultFunction(
+                        false,
+                        'post doesnt exist',
+                        404,
+                        ReturnStatus.BAD_REQUEST,
+                        null
+                    )
+                }
+
+                const comment = await Comment.create(input)
+
+                return ResultFunction(
+                    true,
+                    'comment created',
+                    200,
+                    ReturnStatus.OK,
+                    comment
+                )
+            } catch (error) {
+                return ResultFunction(
+                    false,
+                    'something went wrong',
+                    422,
+                    ReturnStatus.NOT_OK,
+                    null
+                );
+            }
+
+        } catch (error) {
+
+            return ResultFunction(
+                false,
+                'something went wrong',
+                422,
+                ReturnStatus.NOT_OK,
+                null
+            );
+        }
+    }
+
+
+    public async getComments(input: GetComments) {
+        // let likeCount
+        try {
+            const { postId } = input
+
+            try {
+                const existingPost = await Post.findById(postId)
+
+                // console.log(input);
+
+
+                if (!existingPost) {
+                    return ResultFunction(
+                        false,
+                        'post doesnt exist',
+                        404,
+                        ReturnStatus.BAD_REQUEST,
+                        null
+                    )
+                }
+
+                const allComments = await Comment.find({ input })
+
+                return ResultFunction(
+                    true,
+                    'comment created',
+                    200,
+                    ReturnStatus.OK,
+                    allComments
                 )
             } catch (error) {
                 return ResultFunction(

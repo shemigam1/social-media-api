@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { DeletePost, ILike, IPost, LikeData, PostData, UpdatePost } from '../types/post';
+import { CommentData, DeletePost, GetComments, IComment, ILike, IPost, LikeData, PostData, UpdatePost } from '../types/post';
 import { postFactory } from '../services/factories';
 
 
@@ -10,6 +10,15 @@ import { postFactory } from '../services/factories';
 //     likeCount: Schema.Types.ObjectId[];
 //     createdAt: Date;
 // }
+
+export const getFeedController = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const response = await postFactory().feed();
+    return res.status(response.code).json(response);
+}
 
 export const createPostController = async (
     req: Request,
@@ -113,3 +122,31 @@ export const likePostController = async (
     const response = await postFactory().likePost(input);
     return res.status(response.code).json(response);
 };
+
+export const commentPostController = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const input: CommentData = {
+        postId: req.params.postId,
+        userId: req.body.userId,
+        comment: req.body.comment
+    }
+
+    const response = await postFactory().commentPost(input)
+    return res.status(response.code).json(response)
+}
+
+export const getCommentController = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const input: GetComments = {
+        postId: req.params.postId,
+    }
+
+    const response = await postFactory().getComments(input)
+    return res.status(response.code).json(response)
+}

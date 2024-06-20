@@ -45,7 +45,13 @@ export interface IComment {
 }
 
 export type CommentData = {
+    postId: Schema.Types.ObjectId | string;
+    userId: Schema.Types.ObjectId | string;
     comment: string
+}
+
+export type GetComments = {
+    postId: Schema.Types.ObjectId | string;
 }
 
 export interface IFollower {
