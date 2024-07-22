@@ -5,8 +5,19 @@ export interface IPost {
     // postId: Schema.Types.ObjectId | string;
     title: string;
     description: string;
+    // likeCount: number;
+    deleted: boolean;
+
+}
+
+export interface IPostSchema {
+    userId: Schema.Types.ObjectId | string;
+    // postId: Schema.Types.ObjectId | string;
+    title: string;
+    description: string;
     likeCount: number;
     deleted: boolean;
+    createdAt: Date;
 }
 
 export type PostData = {

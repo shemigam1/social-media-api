@@ -30,7 +30,7 @@ export const createPostController = async (
         // postId: "",
         title: req.body.title,
         description: req.body.description,
-        likeCount: 0,
+        // likeCount: 0,
         deleted: false
         // createdAt: Date.now()
     };

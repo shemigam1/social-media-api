@@ -5,8 +5,8 @@ import { followUserController, getAllUsersController, getUserController, updateU
 const userRouter = Router()
 
 userRouter.get('/:userId', authMiddleWare, getUserController)
-userRouter.put('/update/:userId', authMiddleWare, updateUserController)
-userRouter.put('/follow/:followingId', authMiddleWare, followUserController)
-userRouter.get('/getallusers', authMiddleWare, getAllUsersController)
+userRouter.put('/:userId', authMiddleWare, updateUserController)
+userRouter.put('/:followingId/follow', authMiddleWare, followUserController)
+userRouter.get('/', authMiddleWare, getAllUsersController)
 
 export default userRouter

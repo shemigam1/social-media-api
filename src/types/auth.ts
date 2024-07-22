@@ -18,6 +18,15 @@ export interface ISignup {
 	email: string;
 	password: string;
 	description: string;
+	// followerCount: number
+	// followingCount: number
+}
+
+export interface ISignupSchema {
+	name: string,
+	email: string;
+	password: string;
+	description: string;
 	followerCount: number
 	followingCount: number
 }

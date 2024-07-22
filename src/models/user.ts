@@ -1,8 +1,8 @@
 import mongoose, { Schema, Types } from "mongoose";
-import { ISignup } from "../types/auth";
+import { ISignup, ISignupSchema } from "../types/auth";
 import { comparePassword, hashPassword } from "../helpers/hash";
 
-const UserSchema: Schema = new Schema<ISignup>({
+const UserSchema: Schema = new Schema<ISignupSchema>({
     name: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },

@@ -7,13 +7,13 @@ import { commentPostController, createPostController, deletePostController, getA
 const postRouter = Router()
 
 postRouter.get('/feed', authMiddleWare, getFeedController)
-postRouter.post('/createpost', authMiddleWare, createPostController)
-postRouter.get('/getposts/:userId', authMiddleWare, getAllPostsByOneUserController)
-postRouter.get('/getpost/:postId', authMiddleWare, getOnePostByOneUserController)
-postRouter.put('/updatepost/:postId', authMiddleWare, updatePostController)
-postRouter.put('/deletepost/:postId', authMiddleWare, deletePostController)
-postRouter.put('/like/:postId', authMiddleWare, likePostController)
-postRouter.put('/comment/:postId', authMiddleWare, commentPostController)
-postRouter.put('/getcomments/:postId', authMiddleWare, getCommentController)
+postRouter.post('/', authMiddleWare, createPostController)
+postRouter.get('/:userId/all', authMiddleWare, getAllPostsByOneUserController)
+postRouter.get('/:postId', authMiddleWare, getOnePostByOneUserController)
+postRouter.put('/:postId', authMiddleWare, updatePostController)
+postRouter.delete('/:postId', authMiddleWare, deletePostController)
+postRouter.put('/:postId/like', authMiddleWare, likePostController)
+postRouter.put('/:postId/comment', authMiddleWare, commentPostController)
+postRouter.get('/:postId/comment', authMiddleWare, getCommentController)
 
 export default postRouter
